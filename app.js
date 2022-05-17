@@ -11,6 +11,8 @@ app.use(helmet());
 app.use(express.json());
 app.use(morgan("dev"));
 
+app.use("/api/v1", require("./routes/users"));
+
 app.use("/", (_, res) => {
   res.json({
     name: "mr-chidex",

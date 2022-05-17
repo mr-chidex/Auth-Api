@@ -1,6 +1,6 @@
 const joi = require("joi");
 
-module.validateUser = (user) => {
+exports.validateUser = (user) => {
   return joi
     .object({
       name: joi.string().trim().required(),

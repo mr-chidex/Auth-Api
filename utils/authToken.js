@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.getToken = (user) => {
+exports.getToken = (user) => {
   return jwt.sign(
     {
       name: user.name,
