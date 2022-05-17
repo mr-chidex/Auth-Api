@@ -13,7 +13,7 @@ app.use(morgan("dev"));
 
 app.use("/api/v1", require("./routes/users"));
 
-app.use("/", (_, res) => {
+app.get("/", (_, res) => {
   res.json({
     name: "mr-chidex",
     github: "https://github.com/mr-chidex",
