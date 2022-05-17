@@ -13,6 +13,10 @@ app.use(morgan("dev"));
 
 app.use("/api/v1", require("./routes/users"));
 
+app.use((error, _, res, __) => {
+  res.status(500).json({ message: error.message });
+});
+
 app.get("/", (_, res) => {
   res.json({
     name: "mr-chidex",
