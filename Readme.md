@@ -16,6 +16,9 @@ An auth api for users - Testing postgres
     ```
     git clone https://github.com/mr-chidex/Auth-Api.git
 
+    ```
+    
+    ```
     cd Auth-Api
     ```
 
