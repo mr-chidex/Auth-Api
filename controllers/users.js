@@ -1,8 +1,16 @@
+const bcryptjs = require("bcryptjs");
+
 const pool = require("../models/db");
 const { validateUser } = require("../utils/users.validate");
 const { getToken } = require("../utils/authToken");
 const { getHashedPass } = require("../utils/getHashedPass");
 
+/**
+ *
+ * @access - Public
+ * @desc - register a user
+ * @route - POST /api/v1/register
+ */
 exports.register = async (req, res) => {
   const { error, value } = validateUser(req.body);
 
@@ -17,9 +25,10 @@ exports.register = async (req, res) => {
   email = email?.toLowerCase();
 
   //check if user already exist
-  const userExist = await pool.query("SELECT * from users WHERE email = $1", [
-    email,
-  ]);
+  const userExist = await pool.query(
+    "SELECT email from users WHERE email = $1",
+    [email]
+  );
 
   if (userExist.rows.length > 0)
     return res.status(400).json({
@@ -37,5 +46,37 @@ exports.register = async (req, res) => {
     [name, email, hashedPassword]
   );
 
-  res.status(201).json({ user: user.rows[0] });
+  res.status(201).json({ status: "success", user: user.rows[0] });
+};
+
+/**
+ *
+ * @access - Public
+ * @desc - login a user
+ * @route - POST /api/v1/login
+ */
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  //check if email is correct
+  const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+    email?.toLowerCase(),
+  ]);
+
+  if (!user.rows.length > 0)
+    return res
+      .status(400)
+      .json({ status: "error", message: "email or password is incorrect" });
+
+  const userDetails = user.rows[0];
+
+  //check if password is correct
+  const isMatch = await bcryptjs.compare(password, userDetails?.password);
+  if (!isMatch)
+    return res
+      .status(400)
+      .json({ status: "error", message: "email or password is incorrect" });
+
+  const token = getToken(userDetails);
+  res.json({ name: userDetails.email, email: userDetails.email, token });
 };
