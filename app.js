@@ -11,8 +11,11 @@ app.use(helmet());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use("/", (req, res) => {
-  res.json({ message: "hello" });
+app.use("/", (_, res) => {
+  res.json({
+    name: "mr-chidex",
+    github: "https://github.com/mr-chidex",
+  });
 });
 
 app.listen(PORT, console.log(`server running on PORT - ${PORT}`));
