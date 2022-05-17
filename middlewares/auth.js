@@ -1,8 +1,9 @@
-const pool = require('../models/db')
+const jwt = require("jsonwebtoken");
 
-module.authUser = (req, res, next) => {
+const pool = require("../models/db");
+
+exports.authUser = async (req, res, next) => {
   try {
-
     if (!req.headers.authorization)
       return res.status(401).json({ message: "No authorization header" });
 
@@ -13,15 +14,18 @@ module.authUser = (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: "Invalid token" });
 
-    const decodedToken = JWT.verify(token, process.env.SECRET_KEY);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!decodedToken) return res.status(403).json({ message: "access denied" });
+    if (!decodedToken)
+      return res.status(403).json({ message: "access denied" });
 
-    const user = await pool.query("SELECT * FROM users WHERE id = $1", [decodedToken?.id])
+    const user = await pool.query("SELECT * FROM users WHERE id = $1", [
+      decodedToken?.id,
+    ]);
+
     req.user = user.rows[0];
     next();
-
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};

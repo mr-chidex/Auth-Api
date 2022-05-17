@@ -1,10 +1,19 @@
 const expressPromise = require("express-promise-router");
-// const router = expressPromise();
-const router = require("express").Router();
+const router = expressPromise();
 
-const { register, login } = require("../controllers/users");
+const { authUser } = require("../middlewares/auth");
+
+const {
+  register,
+  login,
+  getAllUsers,
+  getUser,
+} = require("../controllers/users");
 
 router.route("/register").post(register);
 router.route("/login").post(login);
+
+router.route("/users").get(authUser, getAllUsers);
+router.route("/users/:userId").get(authUser, getUser);
 
 module.exports = router;

@@ -78,5 +78,41 @@ exports.login = async (req, res) => {
       .json({ status: "error", message: "email or password is incorrect" });
 
   const token = getToken(userDetails);
-  res.json({ name: userDetails.email, email: userDetails.email, token });
+  res.json({
+    status: "success",
+    name: userDetails.email,
+    email: userDetails.email,
+    token,
+  });
+};
+
+/**
+ *
+ * @access - Private
+ * @desc - get all users
+ * @route - POST /api/v1/users
+ */
+exports.getAllUsers = async (_, res) => {
+  const users = await pool.query("SELECT * FROM users");
+
+  res.json({ status: "success", users: users.rows });
+};
+
+/**
+ *
+ * @access - Private
+ * @desc - get single user
+ * @route - POST /api/v1/users/:userId
+ */
+exports.getUser = async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await pool.query("SELECT * FROM users WHERE id =  $1", [userId]);
+
+  if (!user.rows.length > 0)
+    return res
+      .status(400)
+      .json({ status: "error", message: "user with id does not exist" });
+
+  res.json({ status: "success", user: user.rows[0] });
 };
