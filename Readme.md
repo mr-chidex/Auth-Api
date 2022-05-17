@@ -10,6 +10,7 @@ An auth api for users - Testing postgres
 - Git
 - Json Web Token
 - Postman
+- Heroku
 
 ## Clone this project
 
@@ -34,6 +35,14 @@ git clone https://github.com/mr-chidex/Auth-Api.git
 
 ```
  yarn dev
+```
+
+### Running in production
+
+Remember to set for ssl confguration n the HEROKU CLI
+
+```
+heroku config:set PGSSLMODE=no-verify
 ```
 
 ## Show your support
