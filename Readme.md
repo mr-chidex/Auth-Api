@@ -13,13 +13,9 @@ An auth api for users - Testing postgres
 
 ## Clone this project
 
-    ```
-    git clone https://github.com/mr-chidex/Auth-Api.git
-    ```
-
-    ```
-    cd Auth-Api
-    ```
+```
+git clone https://github.com/mr-chidex/Auth-Api.git
+```
 
 ## Configure app
 
